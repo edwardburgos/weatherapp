@@ -1,27 +1,41 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import s from './Card.module.css'
 import { City } from '../../extras/types'
 
 
-export default function Card({ name, country, flag, weather, weatherIconId, temperature, windSpeed }: City) {
+export default function Card({ name, country, flag, weather, weatherIcon, temperature, windSpeed }: City) {
   // acá va tu código
-  
+
 
   return (
     <div className={s.card}>
-      <h2 className='text-center'>{name}</h2>
+      <h2 className='text-center mb-3'>{name}</h2>
       <div className={s.countryInfo}>
-      <img className={s.countryFlag} src={flag} alt='Country flag'></img>
-        <p className='bold'>{country}</p>
+        <div className={s.iconContainer}>
+          <img className={s.countryFlag} src={flag} alt='Country flag'></img>
+        </div>
+
+        <div className={s.detailsContainer}>
+          <label className='bold'>Country</label>
+          <p className='mb-0'>{country}</p>
+        </div>
       </div>
-      <h1>{country}</h1>
+      <div className={s.weatherInfo}>
+        <div className={s.iconContainer}>
+          <img className={s.weatherIcon} src={weatherIcon} alt='Weather representation'></img>
+        </div>
+        <div className={s.detailsContainer}>
+          <label className='bold'>Weather</label>
+          <p className='mb-0'>{weather}</p>
+        </div>
+      </div>
 
 
-     
-      <h1>{weather}</h1>
-      <h1>{weatherIconId}</h1>
-      <h1>{temperature}</h1>
-      <h1>{windSpeed}</h1>
+      <label className='bold'>Temperature</label>
+      <p>{temperature}</p>
+
+      <label className='bold'>Wind speed</label>
+      <p className='mb-0'>{windSpeed} meter/sec</p>
 
       {/* <div className={styles.card}>
       <button onclick={props.onClose} className={styles.closeButton}>x</button>

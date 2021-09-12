@@ -3,7 +3,7 @@ export type City = {
     country: string;
     flag: string;
     weather: string;
-    weatherIconId: string;
+    weatherIcon: string;
     temperature: number;
     windSpeed: number;
 }

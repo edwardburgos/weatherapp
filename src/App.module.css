@@ -41,12 +41,18 @@
   width: 25%;
 }
 
+.earthGif {
+  height: 60px;
+  margin-bottom: 16px;
+}
+
 .appContainer {
+  text-align: center;
   padding: 16px 5% 0 5%;
 }
 
 .cardsContainer {
-  height: calc(100vh - 161px);
+  height: calc(100vh - 237px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +60,7 @@
 
 @media screen and (min-width: 768px) {
   .cardsContainer {
-      height: calc(100vh - 114px);
+      height: calc(100vh - 190px);
   }
 }
 

@@ -5,6 +5,7 @@
     background-color: rgba(231, 233, 235, 0.5);
     padding: 16px;
     border-radius: 1rem;
+    text-align: left;
     /* display: flex;
     flex-wrap: wrap;
     justify-content: center; */
@@ -38,6 +39,33 @@
     height: 200px;
     width: 100%;
     object-fit: contain;
+}
+
+.iconContainer {
+    width: 20%;
+}
+.detailsContainer {
+    width: 80%;
+}
+
+.countryInfo {
+    display: flex;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.countryFlag {
+    height: 24px;
+}
+
+.weatherInfo {
+    display: flex;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.weatherIcon {
+    height: 48px;
 }
 
 .temperament {
