@@ -16,3 +16,8 @@ export type AvailableCity = {
     name: string,
     country: string
 };
+
+export type Country = {
+    code: string,
+    name: string
+}

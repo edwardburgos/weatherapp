@@ -1,11 +1,18 @@
 //import axios from 'axios'; // Esta librería también es necesaria para hacer el request al servidor
-import { City } from '../extras/types'
+import { City, Country } from '../extras/types'
 
 
 export function modifyChoosenCities(choosenCities: City[]) {
     return {
         type: 'MODIFY_CHOOSEN_CITIES',
         choosenCities
+    }
+}
+
+export function setCountries(countries: Country[]) {
+    return {
+        type: 'SET_COUNTRIES',
+        countries
     }
 }
 // export function setLoginOrNot() {

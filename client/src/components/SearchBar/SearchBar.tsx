@@ -4,16 +4,15 @@ import { Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { modifyChoosenCities } from '../../actions';
-import { City, Flags, AvailableCity } from '../../extras/types';
-import { countries } from '../../extras/countries';
-import { info } from '../../extras/info';
-import { countriesCities } from '../../extras/countriesCities';
+import { City, Flags, AvailableCity, Country } from '../../extras/types';
 
 
 export default function SearchBar() {
 
+  const countries = useSelector((state: { countries: Country[] }) => state.countries)
+  // const [countries, setCountries] = useState<Country[]>([])
   const [availableCities, setAvailableCities] = useState<string[]>([])
-  const [showModal, setShowModal] = useState(true)
+  const [showModal, setShowModal] = useState(false)
   const [buttonState, setButtonState] = useState(false)
   const [buttonContent, setButtonContent] = useState('Search')
   const [city, setCity] = useState('')
@@ -23,8 +22,10 @@ export default function SearchBar() {
 
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
 
+  
+
   useEffect(() => {
-    if (country !== 'default') setAvailableCities(countriesCities.filter(f => f.country === country)[0]['cities'])
+    //if (country !== 'default') setAvailableCities(countriesCities.filter(f => f.country === country)[0]['cities'])
   }, [country])
 
   async function searchCity(cityName: string) {
@@ -55,9 +56,11 @@ export default function SearchBar() {
     <>
       <div className={s.container}>
         <div className={s.searchContainer}>
-          <select className={`form-control mb-3`} id="countrySelector" value={country} onChange={e => {setCountry(e.target.value);  }} name="country">
+          <select className={`form-control mb-3`} id="countrySelector" value={country} onChange={e => { setCountry(e.target.value); }} name="country">
             <option key='default' value='default'>Select a country</option>
-            {countries.map(e => <option key={e.code} value={e.name}>{e.name}</option>)}
+            {countries.length ?
+            countries.map(e => <option key={e.code} value={e.name}>{e.name}</option>)
+          : null}
           </select>
           <Form.Control className={s.searchInput} placeholder="Enter a city" onChange={e => { setCity(e.target.value); searchCity(e.target.value) }} />
           <button className={`btn btn-primary ${s.searchButton}`} onClick={() => buttonContent === 'Add' ? add() : showResults()} disabled={!city}>{buttonContent}</button>
