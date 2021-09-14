@@ -40,7 +40,7 @@ server.use((req, res, next) => {
   next();
 });
 
-server.use('/localization', index);
+server.use('/', index);
 
 // This handle errors
 server.use((req, res) => {
