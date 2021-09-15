@@ -13,3 +13,8 @@
     display: block;
     font-weight: 600;
 }
+
+.countryFlag {
+    height: 20px;
+    margin-bottom: 8px;
+}

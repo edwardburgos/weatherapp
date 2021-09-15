@@ -20,6 +20,17 @@ h1, h2, h3, h4, h5, h6, .bold{
   font-weight: 600 !important;
 }
 
+.btn:hover {
+  box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
+  border: 1px transparent solid !important;
+}
+
+.disabled, .disabled:hover {
+  pointer-events: none !important;
+  opacity: .65 !important;
+}
+
 /* .container {
   background: url('./img/backgroundPhone.jpg') no-repeat center center fixed; 
   -webkit-background-size: cover;

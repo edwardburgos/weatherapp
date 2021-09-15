@@ -7,7 +7,7 @@ import axios from 'axios';
 import loadingGif from './img/loadingGif.gif';
 import earthGif from './img/earthGif.gif';
 import { City, Flags } from './extras/types'
-import { modifyChoosenCities, setCountries } from './actions';
+import { modifyChoosenCities, setCountries, setFlags } from './actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -26,16 +26,17 @@ export default function App() {
     //dispatch(console.log(cities.cities[0]))
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
-    let flags: Flags = {};
-    require.context('./img/svg', false, /\.(svg)$/).keys().forEach((item, index) => { flags[item.replace('./', '')] = require.context('./img/svg', false, /\.(svg)$/)(item) });
-    setImages(flags);
+    let images: Flags = {};
+    require.context('./img/svg', false, /\.(svg)$/).keys().forEach((item, index) => { images[item.replace('./', '')] = require.context('./img/svg', false, /\.(svg)$/)(item) });
+    console.log(images[0])
+    dispatch(setFlags(images))
     async function getInfo() {
       try {
         // Get user data
         const locationInfo = await axios.get('https://geolocation-db.com/json/', { cancelToken: source.token });
         const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city}&appid=${process.env.REACT_APP_API_KEY}`)
         const { weather, main, wind } = weatherInfo.data
-        dispatch(modifyChoosenCities([...choosenCities, { name: locationInfo.data.city, country: locationInfo.data.country_name, flag: flags[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed }]));
+        dispatch(modifyChoosenCities([...choosenCities, { name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed }]));
         
         // Get countries
         const countries = await axios.get('http://localhost:3001/countries', {cancelToken: source.token})

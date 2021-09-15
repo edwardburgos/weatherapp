@@ -20,6 +20,9 @@
     width: 100%;
 }
 
+.loadingHorizontal {
+    height: 16px;
+}
 
 .searchInputContainer {
     width: 100%;
@@ -71,13 +74,7 @@
     box-shadow: 0 0 10px #27677d;
 }
 
-.searchButton:hover {
-    background-color: #286175;
-    color:#fff;
-}
-.searchButton:active {
-    box-shadow: 0 0 10px #27677d;
-}
+
 /* @media screen and (max-width: 600px) {
     .contenedor {
         display: block;

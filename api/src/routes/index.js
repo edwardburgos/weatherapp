@@ -34,9 +34,21 @@ router.get('/countries', async (req, res, next) => {
         res.send(countries.map(e => {return {name: e.nameNormal, code: e.code}}))
     } catch (e) {
         console.log(e)
-        next
+        next()
     }
 });
+
+router.get('/stateCode', async (req, res, next) => {
+    const {countryCode, stateName} = req.query;
+    try {
+        const country = await Country.findOne({where: {code: countryCode}})
+        const state = await State.findOne({where: {nameLower: stateName.toLowerCase(), countryId: country.id}})
+        res.send(state.code)
+    } catch (e) {
+        console.log(e)
+        next()
+    }
+})
 
 
 module.exports = router;

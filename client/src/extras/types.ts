@@ -27,6 +27,7 @@ export type SearchResult = {
     state: string,
     country: Country
 }
+
 export type ResultProps = {
     searchResult: SearchResult,
     margin: number

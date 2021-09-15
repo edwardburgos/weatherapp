@@ -1,5 +1,5 @@
 //import axios from 'axios'; // Esta librería también es necesaria para hacer el request al servidor
-import { City, Country } from '../extras/types'
+import { City, Country, Flags } from '../extras/types'
 
 
 export function modifyChoosenCities(choosenCities: City[]) {
@@ -13,6 +13,20 @@ export function setCountries(countries: Country[]) {
     return {
         type: 'SET_COUNTRIES',
         countries
+    }
+}
+
+export function setFlags(flags: Flags) {
+    return {
+        type: 'SET_FLAGS',
+        flags
+    }
+}
+
+export function modifyModalState(modalState: boolean ) {
+    return {
+        type: 'MODIFY_MODAL_STATE',
+        modalState
     }
 }
 // export function setLoginOrNot() {
