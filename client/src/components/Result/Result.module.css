@@ -1,0 +1,15 @@
+.container {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    background-color: rgba(231, 233, 235, 0.5);
+    padding: 16px;
+    border-radius: 1rem;
+    text-align: center;
+
+}
+
+.cityName {
+    display: block;
+    font-weight: 600;
+}

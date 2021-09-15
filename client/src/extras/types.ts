@@ -21,3 +21,13 @@ export type Country = {
     code: string,
     name: string
 }
+
+export type SearchResult = {
+    name: string,
+    state: string,
+    country: Country
+}
+export type ResultProps = {
+    searchResult: SearchResult,
+    margin: number
+}

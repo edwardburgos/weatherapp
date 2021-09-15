@@ -9,11 +9,18 @@ const router = Router();
 // This route allows us to get the cities by name
 router.get('/cities', async (req, res, next) => {
     try {
-        const cities = await City.findAll({ attributes: ['nameLower', 'nameNormal', 'stateId', 'countryId'], where: {nameLower: { [Op.substring]: req.query.name}}})
+        let {name, country} = req.query
+        let cities = {data: ''}
+        if (country) {
+            country = await Country.findOne({where: {code: country}})
+            cities = await City.findAll({ attributes: ['nameLower', 'nameNormal', 'stateId', 'countryId'], where: {nameLower: { [Op.substring]: name }, countryId: country.id}, include: [{ model: Country, attributes: ['code', 'nameNormal'] }, {model: State, attributes: ['nameNormal']}]})
+        } else {
+            cities = await City.findAll({ attributes: ['nameLower', 'nameNormal', 'stateId', 'countryId'], where: {nameLower: { [Op.substring]: name }}, include: [{ model: Country, attributes: ['code', 'nameNormal'] }, {model: State, attributes: ['nameNormal']}]})
+        }
         if (cities) {
-            const filterCities = cities.filter(e => e.nameLower === req.query.name).length ? cities.filter(e => e.nameLower === req.query.name) : cities;
-            res.send([...new Set(filterCities.map(e => JSON.stringify({nameNormal: e.nameNormal, stateId: e.stateId, countryId: e.countryId})))].map(e => JSON.parse(e)).slice(0, 10))
-        } else { res(404).send(`There is no city called ${req.query.name}`); }
+            const filterCities = cities.filter(e => e.nameLower === name).length ? cities.filter(e => e.nameLower === name) : cities;
+            res.send([...new Set(filterCities.map(e => JSON.stringify({name: e.nameNormal, state: e.state ? e.state.nameNormal : null, country: {code: e.country.code, name: e.country.nameNormal}})))].map(e => JSON.parse(e)).slice(0, 10))
+        } else { res(404).send(`There is no city called ${name}`); }
     } catch (e) {
         console.log(e)
         next();
