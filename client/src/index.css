@@ -31,6 +31,12 @@ h1, h2, h3, h4, h5, h6, .bold{
   opacity: .65 !important;
 }
 
+@media only screen and (max-width: 576px) {
+  .modal-dialog {
+    margin: 5% !important;
+  }
+} 
+
 /* .container {
   background: url('./img/backgroundPhone.jpg') no-repeat center center fixed; 
   -webkit-background-size: cover;

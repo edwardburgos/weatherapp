@@ -6,9 +6,9 @@
     padding: 16px;
     border-radius: 1rem;
     text-align: left;
-    /* display: flex;
-    flex-wrap: wrap;
-    justify-content: center; */
+    align-self: stretch;
+    display: flex;
+    align-items: center; 
 }
 
 .city {
@@ -48,20 +48,14 @@
     width: 80%;
 }
 
-.countryInfo {
+.infoSection {
     display: flex;
     margin-bottom: 16px;
     align-items: center;
 }
 
-.countryFlag {
-    height: 24px;
-}
-
-.weatherInfo {
-    display: flex;
-    margin-bottom: 16px;
-    align-items: center;
+.countryFlag,.icon{
+    width: 50%;
 }
 
 .weatherIcon {

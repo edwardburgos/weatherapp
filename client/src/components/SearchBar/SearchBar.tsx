@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modifyChoosenCities, modifyModalState } from '../../actions';
 import { City, Flags, AvailableCity, Country, SearchResult } from '../../extras/types';
 import Result from '../Result/Result'
-import loadingHorizontal from '../../img/loadingHorizontalGif.gif';
+import loadingHorizontal from '../../img/others/loadingHorizontalGif.gif';
 
 
 export default function SearchBar() {
@@ -125,7 +125,7 @@ export default function SearchBar() {
             Select the citie you want to add
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={s.modalBody}>
           {
             results.length ?
               results.map((e, index) =>

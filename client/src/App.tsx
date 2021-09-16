@@ -4,8 +4,8 @@ import s from './App.module.css';
 import SearchBar from './components/SearchBar/SearchBar';
 import Card from './components/Card/Card';
 import axios from 'axios';
-import loadingGif from './img/loadingGif.gif';
-import earthGif from './img/earthGif.gif';
+import loadingGif from './img/others/loadingGif.gif';
+import earthGif from './img/others/earthGif.gif';
 import { City, Flags } from './extras/types'
 import { modifyChoosenCities, setCountries, setFlags } from './actions';
 import { useDispatch, useSelector } from 'react-redux';

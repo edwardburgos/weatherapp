@@ -52,15 +52,17 @@
 }
 
 .cardsContainer {
-  height: calc(100vh - 237px);
+  min-height: calc(100vh - 258px);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 @media screen and (min-width: 768px) {
   .cardsContainer {
-      height: calc(100vh - 190px);
+      min-height: calc(100vh - 204px);
+      justify-content: space-around;
   }
 }
 

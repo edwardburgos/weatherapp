@@ -33,3 +33,4 @@ export type ResultProps = {
     searchResult: SearchResult,
     margin: number
 }
+
