@@ -43,7 +43,7 @@ export default function SearchBar() {
     // //   console.log('sabor', typeof cancel )
     //   cancel()
     // }
-    if (typeof source !== 'string') { source.cancel(); setLoading(false);}
+  if (typeof source !== 'string') { source.cancel();} //No es necesario cancelar en cada una solo en la última cuando 
     const CancelToken = axios.CancelToken;
     const newSource = CancelToken.source();
     console.log('NEW YORK', newSource.cancel) // -----------------------------------ANOTAR

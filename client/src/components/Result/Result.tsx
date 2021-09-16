@@ -32,8 +32,7 @@ export default function Result({ searchResult, margin}: ResultProps) {
       }
       const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${searchResult.name},${stateCode ? stateCode : ''},${searchResult.country.code}&appid=${process.env.REACT_APP_API_KEY}`)
       const { weather, main, wind } = citieInfo.data
-      
-      dispatch(modifyChoosenCities([...choosenCities, { name: citieInfo.data.city, country: citieInfo.data.country_name, flag: flags[`${citieInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather ? weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase() : '', weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed }]))  
+      dispatch(modifyChoosenCities([...choosenCities, { name: searchResult.name, country: searchResult.country.name, flag: flags[`${searchResult.country.code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: searchResult.state ? searchResult.state : ''}]))  
       dispatch(modifyModalState(false))
     } catch (e) {
       console.log(e)

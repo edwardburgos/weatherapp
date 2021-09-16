@@ -3,7 +3,7 @@ import s from './Card.module.css'
 import { City } from '../../extras/types'
 
 
-export default function Card({ name, country, flag, weather, weatherIcon, temperature, windSpeed }: City) {
+export default function Card({ name, country, flag, weather, weatherIcon, temperature, windSpeed, state }: City) {
   // acá va tu código
 
 
@@ -16,8 +16,11 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
         </div>
 
         <div className={s.detailsContainer}>
-          <label className='bold'>Country</label>
-          <p className='mb-0'>{country}</p>
+          <label className='bold'>Location</label>
+          <div>
+            {state ? <span>{`${state}, `}</span> : null}
+            <span className='mb-0'>{country}</span>
+          </div>
         </div>
       </div>
       <div className={s.weatherInfo}>

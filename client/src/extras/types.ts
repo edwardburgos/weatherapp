@@ -6,6 +6,7 @@ export type City = {
     weatherIcon: string;
     temperature: number;
     windSpeed: number;
+    state: string;
 }
 
 export type Flags = {

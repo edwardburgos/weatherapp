@@ -34,9 +34,9 @@ export default function App() {
       try {
         // Get user data
         const locationInfo = await axios.get('https://geolocation-db.com/json/', { cancelToken: source.token });
-        const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city}&appid=${process.env.REACT_APP_API_KEY}`)
+        const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city},${locationInfo.data.state},${locationInfo.data.country_code}&appid=${process.env.REACT_APP_API_KEY}`)
         const { weather, main, wind } = weatherInfo.data
-        dispatch(modifyChoosenCities([...choosenCities, { name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed }]));
+        dispatch(modifyChoosenCities([...choosenCities, { name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: locationInfo.data.state ? locationInfo.data.state : '' }]));
         
         // Get countries
         const countries = await axios.get('http://localhost:3001/countries', {cancelToken: source.token})
@@ -82,7 +82,7 @@ export default function App() {
                   <>
                     {
                       choosenCities.map((e: City, index) =>
-                        <Card key={index} name={e.name} country={e.country} flag={e.flag} weather={e.weather} weatherIcon={e.weatherIcon} temperature={e.temperature} windSpeed={e.windSpeed}></Card>
+                        <Card key={index} name={e.name} country={e.country} flag={e.flag} weather={e.weather} weatherIcon={e.weatherIcon} temperature={e.temperature} windSpeed={e.windSpeed} state={e.state}></Card>
                       )
                     }
                   </>
