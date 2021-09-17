@@ -25,7 +25,10 @@ export type Country = {
 
 export type SearchResult = {
     name: string,
-    state: string,
+    state: {
+        code: string,
+        name: string
+    },
     country: Country
 }
 

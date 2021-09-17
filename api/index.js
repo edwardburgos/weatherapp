@@ -71,7 +71,6 @@ conn.sync({ force: false }).then(async () => { // force: false > La información
             await City.create({ nameLower: e.name.toLowerCase(), nameNormal: e.name, stateId: state ? state.id : null, countryId: country.id })
             if (index === JSON.parse(cities).length - 1) resolve();
           } catch (err) {
-            console.log('ROMEO', e.name, e.state)
             console.log(err)
           }
         });

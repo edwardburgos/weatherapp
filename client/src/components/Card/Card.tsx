@@ -41,7 +41,7 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
           </div>
           <div className={s.detailsContainer}>
             <label className='bold'>Temperature</label>
-            <p className='mb-0'>{temperature}</p>
+            <p className='mb-0'>{`${temperature} K | ${Math.round(((((temperature - 273.15) * 1.8) + 32) + Number.EPSILON) * 100) / 100} °F | ${Math.round((temperature - 273.15) * 100) / 100} °C`}</p>
           </div>
         </div>
         <div className={s.infoSection}>
@@ -53,33 +53,6 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
             <p className='mb-0'>{windSpeed} meter/sec</p>
           </div>
         </div>
-
-
-
-
-
-
-        {/* <div className={styles.card}>
-      <button onclick={props.onClose} className={styles.closeButton}>x</button>
-      <h2>{props.name}</h2>
-      <div className={styles.flex}>
-        <div className={styles.firstElement}>
-          <div className={`${styles.flex} ${styles.subtitles}`}>
-            <span>Min</span>
-            <span>Max</span>
-          </div>
-          <div className={`${styles.flex} ${styles.temperatures}`}>
-            <span>{props.min}</span>
-            <span>{props.max}</span>
-          </div>
-        </div>
-        <div className={styles.secondElement}>
-          <img src={"http://openweathermap.org/img/wn/" + props.img + "@2x.png"} alt={"Imagen" + props.img}></img>
-        </div>
-      </div>
-
-    </div>
-    <h1>HOLA</h1> */}
       </div>
     </div>
   )

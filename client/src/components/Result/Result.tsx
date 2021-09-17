@@ -25,14 +25,9 @@ export default function Result({ searchResult, margin}: ResultProps) {
 
   async function add() {
     try {
-      let stateCode = ''
-      if (searchResult.state) {
-        const code = await axios.get(`http://localhost:3001/stateCode/?countryCode=${searchResult.country.code}&stateName=${searchResult.state}`)
-        stateCode = code.data
-      }
-      const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${searchResult.name},${stateCode ? stateCode : ''},${searchResult.country.code}&appid=${process.env.REACT_APP_API_KEY}`)
+      const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${searchResult.name},${searchResult.state ? searchResult.state.code : ''},${searchResult.country.code}&appid=${process.env.REACT_APP_API_KEY}`)
       const { weather, main, wind } = citieInfo.data
-      dispatch(modifyChoosenCities([...choosenCities, { name: searchResult.name, country: searchResult.country.name, flag: flags[`${searchResult.country.code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: searchResult.state ? searchResult.state : ''}]))  
+      dispatch(modifyChoosenCities([...choosenCities, { name: searchResult.name, country: searchResult.country.name, flag: flags[`${searchResult.country.code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed,  state: searchResult.state ? searchResult.state.name : ''}]))  
       dispatch(modifyModalState(false))
     } catch (e) {
       console.log(e)
@@ -45,7 +40,7 @@ export default function Result({ searchResult, margin}: ResultProps) {
       <div className='mb-2'>
       {
         searchResult.state ?
-        <><span>{`${searchResult.state}, `}</span><span>{searchResult.country.name}</span></>
+        <><span>{`${searchResult.state.name}, `}</span><span>{searchResult.country.name}</span></>
         : 
         <><span>{searchResult.country.name}</span></>
       }

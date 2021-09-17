@@ -51,18 +51,23 @@
   padding: 16px 5% 0 5%;
 }
 
-.cardsContainer {
-  min-height: calc(100vh - 258px);
+.searchContent {
   display: flex;
   align-items: center;
+  min-height: calc(100vh - 258px); 
   justify-content: center;
+}
+
+.cardsContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 
 @media screen and (min-width: 768px) {
-  .cardsContainer {
+  .searchContent {
       min-height: calc(100vh - 204px);
-      justify-content: space-around;
   }
 }
 

@@ -18,7 +18,8 @@ export default function SearchBar() {
   const [buttonState, setButtonState] = useState(true)
   const [buttonContent, setButtonContent] = useState('Search')
   const [city, setCity] = useState('')
-  const [country, setCountry] = useState(['app', 'default'])
+  const [state, setState] = useState(['code', 'name'])
+  const [country, setCountry] = useState(['app', 'default', 'name'])
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -26,7 +27,7 @@ export default function SearchBar() {
 
   const modalState = useSelector((state: { modalState: boolean }) => state.modalState)
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
-
+  const flags = useSelector((state: {flags: Flags}) => state.flags)
 
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function SearchBar() {
 
 
   async function searchCity(cityName: string, country: string[]) {
-    let cities: { data: SearchResult[] } = { data: [{ name: '', state: '', country: { code: '', name: '' } }] };
+    let cities: { data: SearchResult[] } = { data: [{ name: '', state: {code: '', name: ''}, country: { code: '', name: '' } }] };
     // if (typeof cancel !== 'string' && cancel !== undefined) { 
     // //   console.log('olor', cancel)
     // //   console.log('sabor', typeof cancel )
@@ -46,7 +47,6 @@ export default function SearchBar() {
   if (typeof source !== 'string') { source.cancel();} //No es necesario cancelar en cada una solo en la última cuando 
     const CancelToken = axios.CancelToken;
     const newSource = CancelToken.source();
-    console.log('NEW YORK', newSource.cancel) // -----------------------------------ANOTAR
     setSource(newSource)
     setLoading(true)
     if (country[1] !== 'default' && country[0] === 'user') {
@@ -55,10 +55,10 @@ export default function SearchBar() {
       cities = await axios.get(`http://localhost:3001/cities?name=${cityName}`, { cancelToken: newSource.token})
     }
     setLoading(false);
-    if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code]); } setButtonContent('Add'); setButtonState(false) }
+    if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code, cities.data[0].country.name]); }; cities.data[0].state ? setState([cities.data[0].state.code, cities.data[0].state.name]) : setState(['code', 'name']); setButtonContent('Add'); setButtonState(false) }
     else {
       if (cities.data.length) {
-        if (country[0] !== 'user') { setCountry(['app', 'default']) } setButtonContent('Search'); setResults(cities.data); setButtonState(false)
+        if (country[0] !== 'user') { setCountry(['app', 'default', 'name']) } setButtonContent('Search'); setResults(cities.data); setButtonState(false)
       } else { setButtonContent('No cities found'); setButtonState(true) }
 
     }
@@ -76,9 +76,14 @@ export default function SearchBar() {
     //   if (results) return setButtonContent('Search');
   }
 
-  function add() {
-    //dispatch(modifyChoosenCities([...choosenCities, { name: 'paolo', country: 'paolo', flag: 'paolo', weather: 'paolo', weatherIcon: `paolo`, temperature: 15, windSpeed: 16 }]))
-
+  async function add() {
+    try {
+      const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state ? state : ''},${country[1]}&appid=${process.env.REACT_APP_API_KEY}`)
+      const { weather, main, wind } = citieInfo.data
+      dispatch(modifyChoosenCities([...choosenCities, { name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : ''}]))  
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   // function showResults() {
