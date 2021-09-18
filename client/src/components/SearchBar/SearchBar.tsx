@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import s from './SearchBar.module.css';
 import { Form, Modal } from 'react-bootstrap';
-import axios, { CancelToken }  from 'axios';
+import axios, { CancelToken } from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { modifyChoosenCities, modifyModalState } from '../../actions';
 import { City, Flags, AvailableCity, Country, SearchResult } from '../../extras/types';
 import Result from '../Result/Result'
 import loadingHorizontal from '../../img/others/loadingHorizontalGif.gif';
+import closeCircleOutline from "../../img/icons/close-circle-outline.svg";
 
 
 export default function SearchBar() {
 
-  const [source, setSource] = useState<{token: CancelToken, cancel: (() => void)} | string>('')
+  const [source, setSource] = useState<{ token: CancelToken, cancel: (() => void) } | string>('')
   const countries = useSelector((state: { countries: Country[] }) => state.countries)
   // const [countries, setCountries] = useState<Country[]>([])
   const [availableCities, setAvailableCities] = useState<string[]>([])
@@ -27,32 +28,32 @@ export default function SearchBar() {
 
   const modalState = useSelector((state: { modalState: boolean }) => state.modalState)
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
-  const flags = useSelector((state: {flags: Flags}) => state.flags)
+  const flags = useSelector((state: { flags: Flags }) => state.flags)
 
 
   useEffect(() => {
     //if (country !== 'default') setAvailableCities(countriesCities.filter(f => f.country === country)[0]['cities'])
   }, [country])
 
-  
+
 
 
   async function searchCity(cityName: string, country: string[]) {
-    let cities: { data: SearchResult[] } = { data: [{ name: '', state: {code: '', name: ''}, country: { code: '', name: '' } }] };
+    let cities: { data: SearchResult[] } = { data: [{ name: '', state: { code: '', name: '' }, country: { code: '', name: '' } }] };
     // if (typeof cancel !== 'string' && cancel !== undefined) { 
     // //   console.log('olor', cancel)
     // //   console.log('sabor', typeof cancel )
     //   cancel()
     // }
-  if (typeof source !== 'string') { source.cancel();} //No es necesario cancelar en cada una solo en la última cuando 
+    if (typeof source !== 'string') { source.cancel(); } //No es necesario cancelar en cada una solo en la última cuando 
     const CancelToken = axios.CancelToken;
     const newSource = CancelToken.source();
     setSource(newSource)
     setLoading(true)
     if (country[1] !== 'default' && country[0] === 'user') {
-      cities = await axios.get(`http://localhost:3001/cities?name=${cityName}&country=${country[1]}`, { cancelToken: newSource.token})
+      cities = await axios.get(`http://localhost:3001/cities?name=${cityName}&country=${country[1]}`, { cancelToken: newSource.token })
     } else {
-      cities = await axios.get(`http://localhost:3001/cities?name=${cityName}`, { cancelToken: newSource.token})
+      cities = await axios.get(`http://localhost:3001/cities?name=${cityName}`, { cancelToken: newSource.token })
     }
     setLoading(false);
     if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code, cities.data[0].country.name]); }; cities.data[0].state ? setState([cities.data[0].state.code, cities.data[0].state.name]) : setState(['code', 'name']); setButtonContent('Add'); setButtonState(false) }
@@ -80,7 +81,7 @@ export default function SearchBar() {
     try {
       const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state ? state : ''},${country[1]}&appid=${process.env.REACT_APP_API_KEY}`)
       const { weather, main, wind } = citieInfo.data
-      dispatch(modifyChoosenCities([...choosenCities, { name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : ''}]))  
+      dispatch(modifyChoosenCities([...choosenCities, { name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : '' }]))
     } catch (e) {
       console.log(e)
     }
@@ -92,29 +93,54 @@ export default function SearchBar() {
   //   }
   // }
   function noAction() {
-    if (typeof source !== 'string') { source.cancel(); }  
+    if (typeof source !== 'string') { source.cancel(); }
     setLoading(false);
     setButtonState(true);
+  }
+
+  function disableButton (origin: string) {
+    if (origin === 'city') {
+      if (country[0] === 'app') {
+        setCountry(['app', 'default'])
+        setButtonState(true)
+      } else {
+        return country[1] === 'default' ? setButtonState(true) : null
+      }
+    } else {
+      return !city ? setButtonState(true) : null
+    }
   }
 
   return (
     <>
       <div className={s.container}>
         <div className={s.searchContainer}>
-          <select className={`form-control mb-3`} id="countrySelector" value={country[1]} onChange={e => { setCountry(['user', e.target.value]); e.target.value === 'default' && !city ? noAction() : searchCity(city, ['user', e.target.value]) }} name="country">
-            <option key='default' value='default'>Select a country</option>
-            {countries.length ?
-              countries.map(e => <option key={e.code} value={e.code}>{e.name}</option>)
-              : null}
-          </select>
-          <Form.Control className={s.searchInput} placeholder="Enter a city" onChange={e => { setCity(e.target.value); !e.target.value && country[1] === 'default' ? noAction() : searchCity(e.target.value, country); }} />
+
+          <div className={s.selectContainer}>
+            <select className={`form-control`} id="countrySelector" value={country[1]} onChange={e => { setCountry(['user', e.target.value]); e.target.value === 'default' && !city ? noAction() : searchCity(city, ['user', e.target.value]) }} name="country">
+              <option key='default' value='default'>Select a country</option>
+              {countries.length ?
+                countries.map(e => <option key={e.code} value={e.code}>{e.name}</option>)
+                : null}
+            </select>
+            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => {setCountry(['app', 'default', 'name']); disableButton('country')}} />
+          </div>
+
+          <div className={`${s.test} ${s.searchInput}`}>
+            <Form.Control value={city} className={` ${s.inputPassword}`} placeholder="Enter a city" onChange={e => { setCity(e.target.value); !e.target.value && country[1] === 'default' ? noAction() : searchCity(e.target.value, country); }} />
+            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => {setCity(''); disableButton('city')}}/>
+          </div>
+
+
+
+
           {
-            loading ? 
-            <div className={`btn btn-primary disabled ${s.searchButton}`}>
-              <img src={loadingHorizontal} className={s.loadingHorizontal} alt='Loading'></img>
-            </div>
-            :
-            <button className={`btn btn-primary ${s.searchButton}`} onClick={() => buttonContent === 'Add' ? add() : results.length ? dispatch(modifyModalState(true)) : null} disabled={buttonState}>{buttonContent}</button>
+            loading ?
+              <div className={`btn btn-primary disabled ${s.searchButton}`}>
+                <img src={loadingHorizontal} className={s.loadingHorizontal} alt='Loading'></img>
+              </div>
+              :
+              <button className={`btn btn-primary ${s.searchButton}`} onClick={() => buttonContent === 'Add' ? add() : results.length ? dispatch(modifyModalState(true)) : null} disabled={buttonState}>{buttonContent}</button>
           }
         </div>
       </div>
