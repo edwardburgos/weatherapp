@@ -1,16 +1,32 @@
 import React, { useState } from 'react';
 import s from './Card.module.css'
-import { City } from '../../extras/types'
+import { City, Flags } from '../../extras/types'
 import temperatureIcon from '../../temperature.svg';
 import windSpeedIcon from '../../img/others/windSpeed.png';
+import closeCircleOutline from "../../img/icons/close-circle-outline.svg";
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { modifyChoosenCities } from '../../actions';
 
 
 export default function Card({ name, country, flag, weather, weatherIcon, temperature, windSpeed, state }: City) {
   // acá va tu código
+  const dispatch = useDispatch();
+  const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
 
+  
+  async function deleteCity() {
+      let localChoosenCities: City[] = []
+      let localItems = JSON.parse(localStorage.getItem("choosenCities") || '[]')
+      const stateCountryCode = await axios.get(`http://localhost:3001/stateCountryCode?stateName=${state}&countryName=${country}`);
+      localItems = localItems.filter((e: string[]) => !(e[0] === name && e[1] === stateCountryCode.data.stateCode && e[2] === stateCountryCode.data.countryCode))   
+      localStorage.setItem('choosenCities', JSON.stringify(localItems))
+      dispatch(modifyChoosenCities(choosenCities.filter((e: City) => !(e.name === name && e.country === country && e.state === state))))
+  }
 
   return (
     <div className={s.card}>
+      <img src={closeCircleOutline} className={s.iconDumb} onClick={() => deleteCity()} />
       <div className='w-100'>
         <h2 className='text-center mb-3'>{name}</h2>
         <div className={s.infoSection}>

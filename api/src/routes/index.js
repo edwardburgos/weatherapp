@@ -67,4 +67,20 @@ router.get('/cityHasState', async (req, res, next) => {
     }
 })
 
+router.get('/stateCountryCode', async (req, res, next) => {
+    const {stateName, countryName} = req.query
+    try {
+        const country = await Country.findOne({ where: { nameNormal: countryName } })
+        if (stateName) {
+            const state = await State.findOne({ where: { nameNormal: stateName, countryId: country.id } })
+            res.send({ countryCode: country.code, stateCode: state.code })
+        } else {
+            res.send({ countryCode: country.code, stateCode: '' })
+        }
+    } catch (e) {
+        console.log(e)
+        next()
+    }
+})
+
 module.exports = router;

@@ -8,6 +8,21 @@
     text-align: left;
     display: flex;
     align-items: center;
+    position: relative;
+}
+
+.iconDumb {
+    position: absolute;
+    right: 16px;
+    max-height: 19px;
+    top: 16px;
+    border-radius: 50%;
+}
+
+.iconDumb:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+    -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
 }
 
 .city {
@@ -17,12 +32,6 @@
 .cardPublicProfile {
     width: 100% !important;
     margin: 0 0 16px 0 !important;
-}
-
-.card:hover {
-    cursor: pointer;
-    box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
-    -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
 }
 
 .title {
