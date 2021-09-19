@@ -44,8 +44,9 @@ export default function App() {
           const localItems = JSON.parse(localStorage.getItem("choosenCities") || '[]')
           for (const e of localItems) {
             const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${e[0]},${e[1]},${e[2]}&appid=${process.env.REACT_APP_API_KEY}`)
+            const stateCountryName = await axios.get(`http://localhost:3001/stateCountryName?countryCode=${e[2]}&stateCode=${e[1]}`)
             const { weather, main, wind } = weatherInfo.data
-            localChoosenCities = [...localChoosenCities, { name: e[0], country: weatherInfo.data.name, flag: images[`${e[2].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: e[1] }];
+            localChoosenCities = [...localChoosenCities, { name: e[0], country: stateCountryName.data.countryName, flag: images[`${e[2].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: stateCountryName.data.stateName }];
           }
           dispatch(modifyChoosenCities(localChoosenCities))
         }
