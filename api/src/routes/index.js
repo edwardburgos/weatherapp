@@ -18,7 +18,7 @@ router.get('/cities', async (req, res, next) => {
             cities = await City.findAll({ attributes: ['nameLower', 'nameNormal', 'stateId', 'countryId'], where: { nameLower: { [Op.substring]: name.toLowerCase() } }, include: [{ model: Country, attributes: ['code', 'nameNormal'] }, { model: State, attributes: ['nameNormal', 'code'] }] })
         }
         if (cities) {
-            const filterCities = cities.filter(e => e.nameLower === name).length ? cities.filter(e => e.nameLower === name) : cities;
+            const filterCities = cities.filter(e => e.nameLower === name.toLowerCase()).length ? cities.filter(e => e.nameLower === name.toLowerCase()) : cities;
             res.send([...new Set(filterCities.map(e => JSON.stringify({ name: e.nameNormal, state: e.state ? { code: e.state.code, name: e.state.nameNormal } : null, country: { code: e.country.code, name: e.country.nameNormal } })))].map(e => JSON.parse(e)).slice(0, 10))
         } else { res(404).send(`There is no city called ${name}`); }
     } catch (e) {

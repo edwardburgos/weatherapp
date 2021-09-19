@@ -56,7 +56,7 @@ export default function SearchBar() {
       cities = await axios.get(`http://localhost:3001/cities?name=${cityName}`, { cancelToken: newSource.token })
     }
     setLoading(false);
-    if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code, cities.data[0].country.name]); }; cities.data[0].state ? setState([cities.data[0].state.code, cities.data[0].state.name]) : setState(['code', 'name']); setButtonContent('Add'); setButtonState(false) }
+    if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName.toLowerCase()) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code, cities.data[0].country.name]); }; cities.data[0].state ? setState([cities.data[0].state.code, cities.data[0].state.name]) : setState(['code', 'name']); setButtonContent('Add'); setButtonState(false) }
     else {
       if (cities.data.length) {
         if (country[0] !== 'user') { setCountry(['app', 'default', 'name']) } setButtonContent('Search'); setResults(cities.data); setButtonState(false)

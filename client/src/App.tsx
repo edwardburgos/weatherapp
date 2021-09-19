@@ -102,7 +102,7 @@ export default function App() {
                       }
                     </>
                     :
-                    <p className='bold'>No cities found</p>
+                    <p className='bold'>Your city list is empty</p>
                 }
               </div>
             </div>
