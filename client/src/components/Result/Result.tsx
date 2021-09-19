@@ -2,26 +2,26 @@ import React, { useState } from 'react';
 import s from './Result.module.css'
 import axios from 'axios';
 import { City, ResultProps, Flags } from '../../extras/types';
-import { modifyChoosenCities, modifyModalState} from '../../actions';
+import { modifyChoosenCities, modifyModalState } from '../../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from '../../extras/functions';
 
-export default function Result({ searchResult, margin}: ResultProps) {
+export default function Result({ searchResult, margin }: ResultProps) {
 
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
   const flags = useSelector((state: { flags: Flags }) => state.flags)
   const dispatch = useDispatch();
 
-//   export type Country = {
-//     code: string,
-//     name: string
-// }
+  //   export type Country = {
+  //     code: string,
+  //     name: string
+  // }
 
-// export type SearchResult = {
-//     name: string,
-//     state: string,
-//     country: Country
-// }
+  // export type SearchResult = {
+  //     name: string,
+  //     state: string,
+  //     country: Country
+  // }
 
 
   async function add() {
@@ -33,7 +33,7 @@ export default function Result({ searchResult, margin}: ResultProps) {
         showMessage('This city is already in your list')
       } else {
         localStorage.setItem('choosenCities', JSON.stringify([[searchResult.name, searchResult.state ? searchResult.state.code : '', searchResult.country.code], ...currentStorage]))
-        dispatch(modifyChoosenCities([{ name: searchResult.name, country: searchResult.country.name, flag: flags[`${searchResult.country.code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed,  state: searchResult.state ? searchResult.state.name : ''}, ...choosenCities])) 
+        dispatch(modifyChoosenCities([{ name: searchResult.name, country: searchResult.country.name, flag: flags[`${searchResult.country.code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: searchResult.state ? searchResult.state.name : '' }, ...choosenCities]))
       }
       dispatch(modifyModalState(false))
     } catch (e) {
@@ -43,16 +43,21 @@ export default function Result({ searchResult, margin}: ResultProps) {
 
   return (
     <div className={`${s.container} ${margin ? '' : 'mb-0'}`}>
-      <span className='bold'>{searchResult.name}</span>
-      <div className='mb-2'>
-      {
-        searchResult.state ?
-        <><span>{`${searchResult.state.name}, `}</span><span>{searchResult.country.name}</span></>
-        : 
-        <><span>{searchResult.country.name}</span></>
-      }
+      <div className={s.content}>
+        <img className={s.countryFlag} src={flags[`${searchResult.country.code.toLowerCase()}.svg`].default} alt='Country flag'></img>
+        <div>
+          <span className='bold'>{searchResult.name}</span>
+          <div>
+            {
+              searchResult.state ?
+                <><span>{`${searchResult.state.name}, `}</span><span>{searchResult.country.name}</span></>
+                :
+                <><span>{searchResult.country.name}</span></>
+            }
+          </div>
+        </div>
       </div>
-      <img className={s.countryFlag} src={flags[`${searchResult.country.code.toLowerCase()}.svg`].default} alt='Country flag'></img>
+
       <button className='btn btn-primary w-100' onClick={() => add()}>Add</button>
     </div>
 

@@ -159,7 +159,7 @@ export default function SearchBar() {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Select the citie you want to add
+            Select a city
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={s.modalBody}>
