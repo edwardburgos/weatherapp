@@ -8,7 +8,7 @@ import { City, Flags, AvailableCity, Country, SearchResult } from '../../extras/
 import Result from '../Result/Result'
 import loadingHorizontal from '../../img/others/loadingHorizontalGif.gif';
 import closeCircleOutline from "../../img/icons/close-circle-outline.svg";
-
+import { showMessage } from '../../extras/functions';
 
 export default function SearchBar() {
 
@@ -80,8 +80,12 @@ export default function SearchBar() {
       const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state[0] !== 'code' ? state[0] : ''},${country[1]}&appid=${process.env.REACT_APP_API_KEY}`)
       const { weather, main, wind } = citieInfo.data
       let currentStorage = JSON.parse(localStorage.getItem('choosenCities') || '[]')
-      localStorage.setItem('choosenCities', JSON.stringify([[citieInfo.data.name, state[0] !== 'code' ? state[0] : '', country[1]], ...currentStorage]))
-      dispatch(modifyChoosenCities([{ name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : '' }, ...choosenCities]))
+      if (currentStorage.filter((e: string[]) => e[0] === citieInfo.data.name && e[1] === (state[0] !== 'code' ? state[0] : '') && e[2] === country[1]).length) {
+        showMessage('This city is already in your list')
+      } else {
+        localStorage.setItem('choosenCities', JSON.stringify([[citieInfo.data.name, state[0] !== 'code' ? state[0] : '', country[1]], ...currentStorage]))
+        dispatch(modifyChoosenCities([{ name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : '' }, ...choosenCities]))
+      }
     } catch (e) {
       console.log(e)
     }
@@ -98,7 +102,7 @@ export default function SearchBar() {
     setButtonState(true);
   }
 
-  function disableButton (origin: string) {
+  function disableButton(origin: string) {
     if (origin === 'city') {
       if (country[0] === 'app') {
         setCountry(['app', 'default'])
@@ -123,12 +127,12 @@ export default function SearchBar() {
                 countries.map(e => <option key={e.code} value={e.code}>{e.name}</option>)
                 : null}
             </select>
-            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => {setCountry(['app', 'default', 'name']); disableButton('country')}} />
+            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => { setCountry(['app', 'default', 'name']); disableButton('country') }} />
           </div>
 
           <div className={`${s.test} ${s.searchInput}`}>
             <Form.Control value={city} className={` ${s.inputPassword}`} placeholder="Enter a city" onChange={e => { setCity(e.target.value); !e.target.value && country[1] === 'default' ? noAction() : searchCity(e.target.value, country); }} />
-            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => {setCity(''); disableButton('city')}}/>
+            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => { setCity(''); disableButton('city') }} />
           </div>
 
 

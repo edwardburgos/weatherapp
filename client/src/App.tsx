@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 
+
 export default function App() {
 
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
@@ -34,11 +35,11 @@ export default function App() {
         // Get user data
         if (!localStorage.getItem("choosenCities")) {
           const locationInfo = await axios.get('https://geolocation-db.com/json/', { cancelToken: source.token });
-          const stateCode = await axios.get(`http://localhost:3001/stateCode?countryCode=${locationInfo.data.country_code}&stateName=${locationInfo.data.state}`, { cancelToken: source.token } )
-          const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city},${/^[A-Z]+$/.test(stateCode.data) ? stateCode.data : ''},${locationInfo.data.country_code}&appid=${process.env.REACT_APP_API_KEY}`)
+          const stateCode = await axios.get(`http://localhost:3001/cityHasState?city=${locationInfo.data.city}&stateName=${locationInfo.data.state}&countryCode=${locationInfo.data.country_code}`, { cancelToken: source.token } )
+          const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city},${(stateCode.data).toString().length && /^[A-Z]+$/.test(stateCode.data) ? stateCode.data : ''},${locationInfo.data.country_code}&appid=${process.env.REACT_APP_API_KEY}`)
           const { weather, main, wind } = weatherInfo.data
-          dispatch(modifyChoosenCities([{ name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: locationInfo.data.state ? locationInfo.data.state : '' }, ...choosenCities]));
-          localStorage.setItem('choosenCities', JSON.stringify([[locationInfo.data.city, /^[A-Z]+$/.test(stateCode.data) ? stateCode.data : '', locationInfo.data.country_code]]));
+          dispatch(modifyChoosenCities([{ name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: (stateCode.data).toString().length && /^[A-Z]+$/.test(stateCode.data) ? locationInfo.data.state : '' }, ...choosenCities]));
+          localStorage.setItem('choosenCities', JSON.stringify([[locationInfo.data.city, (stateCode.data).toString().length && /^[A-Z]+$/.test(stateCode.data) ? stateCode.data : '', locationInfo.data.country_code]]));
         } else {
           let localChoosenCities: City[] = []
           const localItems = JSON.parse(localStorage.getItem("choosenCities") || '[]')
