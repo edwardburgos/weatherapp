@@ -49,13 +49,11 @@ export default function SearchBar() {
     const CancelToken = axios.CancelToken;
     const newSource = CancelToken.source();
     setSource(newSource)
-    setLoading(true)
     if (country[1] !== 'default' && country[0] === 'user') {
       cities = await axios.get(`http://localhost:3001/cities?name=${cityName}&country=${country[1]}`, { cancelToken: newSource.token })
     } else {
       cities = await axios.get(`http://localhost:3001/cities?name=${cityName}`, { cancelToken: newSource.token })
     }
-    setLoading(false);
     if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code, cities.data[0].country.name]); }; cities.data[0].state ? setState([cities.data[0].state.code, cities.data[0].state.name]) : setState(['code', 'name']); setButtonContent('Add'); setButtonState(false) }
     else {
       if (cities.data.length) {
@@ -79,9 +77,11 @@ export default function SearchBar() {
 
   async function add() {
     try {
-      const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state ? state : ''},${country[1]}&appid=${process.env.REACT_APP_API_KEY}`)
+      const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state[0] !== 'code' ? state[0] : ''},${country[1]}&appid=${process.env.REACT_APP_API_KEY}`)
       const { weather, main, wind } = citieInfo.data
-      dispatch(modifyChoosenCities([...choosenCities, { name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : '' }]))
+      let currentStorage = JSON.parse(localStorage.getItem('choosenCities') || '[]')
+      localStorage.setItem('choosenCities', JSON.stringify([[citieInfo.data.name, state[0] !== 'code' ? state[0] : '', country[1]], ...currentStorage]))
+      dispatch(modifyChoosenCities([{ name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : '' }, ...choosenCities]))
     } catch (e) {
       console.log(e)
     }

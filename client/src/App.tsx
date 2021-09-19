@@ -28,15 +28,27 @@ export default function App() {
     const source = cancelToken.source();
     let images: Flags = {};
     require.context('./img/svg', false, /\.(svg)$/).keys().forEach((item, index) => { images[item.replace('./', '')] = require.context('./img/svg', false, /\.(svg)$/)(item) });
-    console.log(images[0])
     dispatch(setFlags(images))
     async function getInfo() {
       try {
         // Get user data
-        const locationInfo = await axios.get('https://geolocation-db.com/json/', { cancelToken: source.token });
-        const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city},${locationInfo.data.state},${locationInfo.data.country_code}&appid=${process.env.REACT_APP_API_KEY}`)
-        const { weather, main, wind } = weatherInfo.data
-        dispatch(modifyChoosenCities([...choosenCities, { name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: locationInfo.data.state ? locationInfo.data.state : '' }]));
+        if (!localStorage.getItem("choosenCities")) {
+          const locationInfo = await axios.get('https://geolocation-db.com/json/', { cancelToken: source.token });
+          const stateCode = await axios.get(`http://localhost:3001/stateCode?countryCode=${locationInfo.data.country_code}&stateName=${locationInfo.data.state}`, { cancelToken: source.token } )
+          const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city},${/^[A-Z]+$/.test(stateCode.data) ? stateCode.data : ''},${locationInfo.data.country_code}&appid=${process.env.REACT_APP_API_KEY}`)
+          const { weather, main, wind } = weatherInfo.data
+          dispatch(modifyChoosenCities([{ name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: locationInfo.data.state ? locationInfo.data.state : '' }, ...choosenCities]));
+          localStorage.setItem('choosenCities', JSON.stringify([[locationInfo.data.city, /^[A-Z]+$/.test(stateCode.data) ? stateCode.data : '', locationInfo.data.country_code]]));
+        } else {
+          let localChoosenCities: City[] = []
+          const localItems = JSON.parse(localStorage.getItem("choosenCities") || '[]')
+          for (const e of localItems) {
+            const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${e[0]},${e[1]},${e[2]}&appid=${process.env.REACT_APP_API_KEY}`)
+            const { weather, main, wind } = weatherInfo.data
+            localChoosenCities = [...localChoosenCities, { name: e[0], country: weatherInfo.data.name, flag: images[`${e[2].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: e[1] }];
+          }
+          dispatch(modifyChoosenCities(localChoosenCities))
+        }
 
         // Get countries
         const countries = await axios.get('http://localhost:3001/countries', { cancelToken: source.token })
