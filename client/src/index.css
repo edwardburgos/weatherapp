@@ -20,6 +20,17 @@ h1, h2, h3, h4, h5, h6, .bold{
   font-weight: 600 !important;
 }
 
+.customLink{
+  font-weight: 600;
+  color:#0d6efd;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.customLink:hover{
+  color: #0B5ED7;
+}
+
 .btn:hover {
   box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
   -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;

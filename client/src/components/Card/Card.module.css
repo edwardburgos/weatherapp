@@ -109,16 +109,6 @@
     margin: 0 4px 8px 4px;
 }
 
-.enlace {
-    font-weight: 600;
-    color:#0d6efd;
-    cursor: pointer;
-}
-
-.enlace:hover{
-    color: #0B5ED7;
-}
-
 .borderFlag {
     width: 32px;
     margin-right: 16px;

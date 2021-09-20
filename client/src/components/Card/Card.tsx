@@ -63,7 +63,7 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
               <label className='bold'>Location</label>
               <div>
                 {state ? <span>{`${state}, `}</span> : null}
-                <span className={s.enlace} onClick={() => showMore()} >{country}</span>
+                <span className='customLink' onClick={() => showMore()} >{country}</span>
               </div>
             </div>
           </div>
