@@ -14,16 +14,31 @@
 .iconDumb {
     position: absolute;
     right: 16px;
-    max-height: 19px;
+    height: 19px;
     top: 16px;
     border-radius: 50%;
 }
 
-.iconDumb:hover {
+.addIcon {
+    height: 19px;
+    vertical-align: middle;
+    border-radius: 50%;
+}
+
+.iconDumb:hover, .addIcon:hover {
     cursor: pointer;
     box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
     -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
 }
+
+.addIcon:hover {
+    filter: invert(41%) sepia(94%) saturate(5383%) hue-rotate(211deg) brightness(102%) contrast(99%);
+}
+
+.iconDumb:hover {
+    filter: invert(32%) sepia(89%) saturate(4896%) hue-rotate(340deg) brightness(93%) contrast(83%);
+}
+
 
 .city {
     text-align: center;
@@ -105,72 +120,28 @@
     }
 }
 
-/* 
-.card {
-    box-shadow: 5px 10px 18px #27677d;
-    padding: 25px;
-    border-radius: 20px;
-    background-image: linear-gradient(to bottom right, rgba(51, 171, 212, 0.7), rgba(43, 199, 252, 0.7));
-    box-sizing: border-box;
-    width: 30%;
-    margin-bottom: 30px;
+.enlace {
+    font-weight: 600;
+    color:#0d6efd;
+    cursor: pointer;
 }
 
-.card:hover {
-    background-image: linear-gradient(to bottom right, rgb(51, 171, 212), rgb(43, 199, 252));
+.enlace:hover{
+    color: #0B5ED7;
 }
-.closeButton {
-    background-color: #212529;
-    color: #212529;
-    padding: 0 8px 3px 8px;
-    outline: none;
-    border-radius: 5px;
-    border: #212529 solid 2px;
-    background-color: #fff;
+
+.borderFlag {
+    width: 32px;
+    margin-right: 16px;
+}
+
+.ul {
+    list-style-type: circle;
+    margin-bottom: 0;
+}
+
+.countryFlagBig {
+    width: 50%;
     float: right;
+    padding: 0 0 16px 16px;
 }
-.closeButton:hover {
-    background-color: #212529;
-    color: #fff;
-}
-.closeButton:active {
-    box-shadow: 0 0 10px #27677d;
-}
-.flex {
-    display: flex;
-    align-items: center;
-}
-.firstElement + .secondElement{
-    margin-left: 30px;
-}
-.firstElement {
-    width:50%;
-    margin-left: 20px
-}
-.secondElement {
-    width:50%;
-}
-
-.subtitles span {
-    width: 50%;
-    text-align: center;
-    font-weight: bold;
-}
-
-.temperatures span {
-    width: 50%;
-    text-align: center;
-}
-span {
-    display: block;
-}
-span + span{
-    margin-left: 25px;
-}
-
-
-@media screen and (max-width: 1250px) {
-    .card {
-        width: 100%;
-    }
-} */

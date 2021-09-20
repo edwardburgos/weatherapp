@@ -98,7 +98,7 @@ router.get('/moreCountryInfo', async (req, res, next) => {
             topLevelDomain: countryInfo.data.topLevelDomain[0],
             isoCode2: country.code,
             isoCode3: country.codeBig,
-            numericCode: country.numericCode,
+            numericCode: countryInfo.data.numericCode,
             dialCode: countryInfo.data.callingCodes[0],
             capital: countryInfo.data.capital,
             region: countryInfo.data.region,

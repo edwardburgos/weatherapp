@@ -13,6 +13,24 @@ export type Flags = {
     [key: string]: {default: string}
 }
 
+export type MoreInfo = {
+    name: string,
+    topLevelDomain: string,
+    isoCode2: string,
+    isoCode3: string,
+    numericCode: number,
+    dialCode: string,
+    capital: string,
+    region: string,
+    subregion: string,
+    population: string,
+    demonym: string,
+    borders: {name: string, code: string}[],
+    currencies: string[],
+    languages: string[],
+    regionalBlocs: string[]
+}
+
 export type AvailableCity = {
     name: string,
     country: string

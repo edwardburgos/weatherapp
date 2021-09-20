@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import s from './App.module.css';
 import SearchBar from './components/SearchBar/SearchBar';
 import Card from './components/Card/Card';
