@@ -93,8 +93,10 @@ router.get('/moreCountryInfo', async (req, res, next) => {
             const borderCountry = await Country.findOne({where: {codeBig: e}})
             borders = [...borders, {name: borderCountry.nameNormal, code: borderCountry.code }]
         }
+        let states = await State.findAll({where: {countryId: country.id}})
         const formattedInfo =  {
             name: countryName,
+            states: states.length.toLocaleString(),
             topLevelDomain: countryInfo.data.topLevelDomain[0],
             isoCode2: country.code,
             isoCode3: country.codeBig,

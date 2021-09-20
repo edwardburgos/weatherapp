@@ -15,6 +15,7 @@ export type Flags = {
 
 export type MoreInfo = {
     name: string,
+    states: string,
     topLevelDomain: string,
     isoCode2: string,
     isoCode3: string,

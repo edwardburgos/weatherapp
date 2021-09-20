@@ -22,7 +22,7 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
 
 
   const [moreInfo, setMoreInfo] = useState<MoreInfo>({
-    name: "string", topLevelDomain: "", isoCode2: "", isoCode3: "",
+    name: "", states: "", topLevelDomain: "", isoCode2: "", isoCode3: "",
     numericCode: 0, dialCode: "", capital: "", region: "", subregion: "", population: "", demonym: "", borders: [{ name: "", code: "us" }],
     currencies: [""], languages: [""], regionalBlocs: [""]
   })
@@ -52,8 +52,8 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
       <div className={s.card}>
         <img src={closeCircleOutline} className={s.iconDumb} onClick={() => deleteCity()} />
         <div className='w-100'>
-          <h2 className='text-center mb-3'>{name}</h2>
-          <div className={s.infoSection}>
+          <h2 className='text-center mb-0'>{name}</h2>
+          <div className={`${s.infoSection} mt-3 mb-0`}>
             <div className={s.iconContainer}>
               <img className={s.countryFlag} src={flag} alt='Country flag'></img>
             </div>
@@ -66,7 +66,7 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
               </div>
             </div>
           </div>
-          <div className={s.infoSection}>
+          <div className={`${s.infoSection} mt-3 mb-0`}>
             <div className={s.iconContainer}>
               <img className={s.icon} src={weatherIcon} alt='Weather representation'></img>
             </div>
@@ -75,7 +75,7 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
               <p className='mb-0'>{weather}</p>
             </div>
           </div>
-          <div className={s.infoSection}>
+          <div className={`${s.infoSection} mt-3 mb-0`}>
             <div className={s.iconContainer}>
               <img className={s.icon} src={temperatureIcon} alt='Temperature'></img>
             </div>
@@ -84,7 +84,7 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
               <p className='mb-0'>{`${temperature} K | ${Math.round(((((temperature - 273.15) * 1.8) + 32) + Number.EPSILON) * 100) / 100} °F | ${Math.round((temperature - 273.15) * 100) / 100} °C`}</p>
             </div>
           </div>
-          <div className={s.infoSection}>
+          <div className={`${s.infoSection} mt-3 mb-0`}>
             <div className={s.iconContainer}>
               <img className={s.icon} src={windSpeedIcon} alt='Wind speed'></img>
             </div>
@@ -109,21 +109,22 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
         </Modal.Header>
         <Modal.Body className={s.modalBody}>
           <img className={s.countryFlagBig} src={flag} alt='Country flag'></img>
-          <div className='mb-2'><span className='bold'>Name: </span><span>{moreInfo.name}</span></div>
-          {moreInfo.topLevelDomain ? <div className='mb-2'><span className='bold'>Top Level Domain: </span><span>{moreInfo.topLevelDomain}</span></div> : null}
+          <div className='mb-0 mt-0'><span className='bold'>Name: </span><span>{moreInfo.name}</span></div>
+          {moreInfo.capital ? <div className='mb-0 mt-2'><span className='bold'>Capital: </span><span>{moreInfo.capital}</span></div> : null}
+          {moreInfo.states ? <div className='mb-0 mt-2'><span className='bold'>Total states: </span><span>{moreInfo.states}</span></div> : null}
+          {moreInfo.region ? <div><span className='bold'>Region: </span><span>{moreInfo.region}</span></div> : null}
+          {moreInfo.subregion ? <div className='mb-0 mt-2'><span className='bold'>Subregion: </span><span>{moreInfo.subregion}</span></div> : null}
+          {moreInfo.borders ? <div className='mb-0 mt-2'><span className='bold'>Borders: </span><ul className={s.ul}>{moreInfo.borders.map((e, index) => <li key={index}><img src={flags[`${e.code.toLowerCase()}.svg`].default} className={s.borderFlag} alt='Country flag' />{e.name}</li>)}</ul></div> : null}
+          {moreInfo.population ? <div className='mb-0 mt-2'><span className='bold'>Population: </span><span>{moreInfo.population}</span></div> : null}
+          {moreInfo.demonym ? <div className='mb-0 mt-2'><span className='bold'>Demonym: </span><span>{moreInfo.demonym}</span></div> : null}
+          {moreInfo.languages ? <div className='mb-0 mt-2'><span className='bold'>Languages: </span><ul className={s.ul}>{moreInfo.languages.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
+          {moreInfo.currencies ? <div className='mb-0 mt-2'><span className='bold'>Currencies: </span><ul className={s.ul}>{moreInfo.currencies.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
+          {moreInfo.regionalBlocs ? <div className='mb-0 mt-2'><span className='bold'>Regional Blocs: </span><ul className={s.ul}>{moreInfo.regionalBlocs.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
           {moreInfo.isoCode2 ? <div><span className='bold'>ISO Code 2: </span><span>{moreInfo.isoCode2}</span></div> : null}
           {moreInfo.isoCode3 ? <div><span className='bold'>ISO Code 3: </span><span>{moreInfo.isoCode3}</span></div> : null}
           {moreInfo.numericCode ? <div><span className='bold'>Numeric Code: </span><span>{moreInfo.numericCode}</span></div> : null}
-          {moreInfo.dialCode ? <div className='mb-2'><span className='bold'>Dial Code: </span><span>{moreInfo.dialCode}</span></div> : null}
-          {moreInfo.capital ? <div className='mb-2'><span className='bold'>Capital: </span><span>{moreInfo.capital}</span></div> : null}
-          {moreInfo.region ? <div><span className='bold'>Region: </span><span>{moreInfo.region}</span></div> : null}
-          {moreInfo.subregion ? <div className='mb-2'><span className='bold'>Subregion: </span><span>{moreInfo.subregion}</span></div> : null}
-          {moreInfo.population ? <div className='mb-2'><span className='bold'>Population: </span><span>{moreInfo.population}</span></div> : null}
-          {moreInfo.demonym ? <div className='mb-2'><span className='bold'>Demonym: </span><span>{moreInfo.demonym}</span></div> : null}
-          {moreInfo.borders ? <div className='mb-2'><span className='bold'>Border: </span><ul className={s.ul}>{moreInfo.borders.map((e, index) => <li key={index}><img src={flags[`${e.code.toLowerCase()}.svg`].default} className={s.borderFlag} alt='Country flag' />{e.name}</li>)}</ul></div> : null}
-          {moreInfo.currencies ? <div className='mb-2'><span className='bold'>Currencies: </span><ul className={s.ul}>{moreInfo.currencies.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
-          {moreInfo.languages ? <div className='mb-2'><span className='bold'>Languages: </span><ul className={s.ul}>{moreInfo.languages.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
-          {moreInfo.regionalBlocs ? <div><span className='bold'>Regional Blocs: </span><ul className={s.ul}>{moreInfo.regionalBlocs.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
+          {moreInfo.dialCode ? <div className='mb-0 mt-2'><span className='bold'>Dial Code: </span><span>{moreInfo.dialCode}</span></div> : null}
+          {moreInfo.topLevelDomain ? <div className='mb-0 mt-2'><span className='bold'>Top Level Domain: </span><span>{moreInfo.topLevelDomain}</span></div> : null}
         </Modal.Body>
       </Modal>
     </>

@@ -42,7 +42,7 @@ export default function Result({ searchResult, margin }: ResultProps) {
   }
 
   return (
-    <div className={`${s.container} ${margin ? '' : 'mb-0'}`}>
+    <div className={`${s.container} mb-0 mt-${margin ? '3' : '0'}`}>
       <div className={s.content}>
         <img className={s.countryFlag} src={flags[`${searchResult.country.code.toLowerCase()}.svg`].default} alt='Country flag'></img>
         <div>

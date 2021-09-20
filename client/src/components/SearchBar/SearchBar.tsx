@@ -156,7 +156,7 @@ export default function SearchBar() {
           {
             results.length ?
               results.map((e, index) =>
-                <Result key={index} searchResult={e} margin={index === results.length - 1 ? 0 : 1} />
+                <Result key={index} searchResult={e} margin={index === 0 ? 0 : 1} />
               )
               :
               null
