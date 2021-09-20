@@ -34,8 +34,8 @@ export default function Result({ searchResult, margin }: ResultProps) {
       } else {
         localStorage.setItem('choosenCities', JSON.stringify([[searchResult.name, searchResult.state ? searchResult.state.code : '', searchResult.country.code], ...currentStorage]))
         dispatch(modifyChoosenCities([{ name: searchResult.name, country: searchResult.country.name, flag: flags[`${searchResult.country.code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: searchResult.state ? searchResult.state.name : '' }, ...choosenCities]))
+        dispatch(modifyModalState(false))
       }
-      dispatch(modifyModalState(false))
     } catch (e) {
       console.log(e)
     }
