@@ -95,14 +95,15 @@ export default function SearchBar() {
 
   function disableButton(origin: string) {
     if (origin === 'city') {
+      setButtonContent('Search')
       if (country[0] === 'app') {
         setCountry(['app', 'default'])
         setButtonState(true)
       } else {
-        return country[1] === 'default' ? setButtonState(true) : null
+        return country[1] === 'default' ? setButtonState(true) : searchCity('', country)
       }
     } else {
-      return !city ? setButtonState(true) : null
+      return !city ? setButtonState(true) : searchCity(city, ['app', 'default', 'name'])
     }
   }
 
