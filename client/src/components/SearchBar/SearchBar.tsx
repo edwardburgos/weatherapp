@@ -62,10 +62,11 @@ export default function SearchBar() {
       const { weather, main, wind } = citieInfo.data
       let currentStorage = JSON.parse(localStorage.getItem('choosenCities') || '[]')
       if (currentStorage.filter((e: string[]) => e[0] === citieInfo.data.name && e[1] === (state[0] !== 'code' ? state[0] : '') && e[2] === country[1]).length) {
-        showMessage('This city is already in your list')
+        showMessage(`${citieInfo.data.name}, ${state[1] !== 'name' ? `${state[1]}, ` : ''}${country[2]} is already in your list`)
       } else {
         localStorage.setItem('choosenCities', JSON.stringify([[citieInfo.data.name, state[0] !== 'code' ? state[0] : '', country[1]], ...currentStorage]))
         dispatch(modifyChoosenCities([{ name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : '' }, ...choosenCities]))
+        showMessage(`${citieInfo.data.name}, ${state[1] !== 'name' ? `${state[1]}, ` : ''}${country[2]} was added to your list`)
       }
     } catch (e) {
       showMessage('Sorry, an error ocurred')

@@ -23,11 +23,12 @@ export default function Result({ searchResult, margin }: ResultProps) {
       const { weather, main, wind } = citieInfo.data
       let currentStorage = JSON.parse(localStorage.getItem('choosenCities') || '[]')
       if (currentStorage.filter((e: string[]) => e[0] === searchResult.name && e[1] === (searchResult.state ? searchResult.state.code : '') && e[2] === searchResult.country.code).length) {
-        showMessage('This city is already in your list')
+        showMessage(`${searchResult.name}, ${searchResult.state ? `${searchResult.state.name}, ` : ''}${searchResult.country.name} is already in your list`)
       } else {
         localStorage.setItem('choosenCities', JSON.stringify([[searchResult.name, searchResult.state ? searchResult.state.code : '', searchResult.country.code], ...currentStorage]))
         dispatch(modifyChoosenCities([{ name: searchResult.name, country: searchResult.country.name, flag: flags[`${searchResult.country.code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: searchResult.state ? searchResult.state.name : '' }, ...choosenCities]))
         dispatch(modifyModalState(false))
+        showMessage(`${searchResult.name}, ${searchResult.state ? `${searchResult.state.name}, ` : ''}${searchResult.country.name} was added to your list`)
       }
     } catch (e) {
       showMessage('Sorry, an error ocurred')
