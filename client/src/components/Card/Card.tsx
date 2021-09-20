@@ -1,33 +1,35 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import s from './Card.module.css'
 import { City, Flags, MoreInfo } from '../../extras/types'
 import temperatureIcon from '../../img/others/temperature.svg';
 import windSpeedIcon from '../../img/others/windSpeed.png';
 import closeCircleOutline from "../../img/icons/close-circle-outline.svg";
-import addCircleOutline from "../../img/icons/add-circle-outline.svg";
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { modifyChoosenCities } from '../../actions';
 import { Modal } from 'react-bootstrap';
 import { showMessage } from '../../extras/functions';
-import { IndexKind } from 'typescript';
-
-
 
 export default function Card({ name, country, flag, weather, weatherIcon, temperature, windSpeed, state }: City) {
-  // acá va tu código
-  const dispatch = useDispatch();
+
+  // Redux states
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
   const flags = useSelector((state: { flags: Flags }) => state.flags)
 
-
+  // Own states
+  const [modalState, setModalState] = useState(false)
   const [moreInfo, setMoreInfo] = useState<MoreInfo>({
     name: "", states: "", topLevelDomain: "", isoCode2: "", isoCode3: "",
     numericCode: 0, dialCode: "", capital: "", region: "", subregion: "", population: "", demonym: "", borders: [{ name: "", code: "us" }],
     currencies: [""], languages: [""], regionalBlocs: [""]
   })
-  const [modalState, setModalState] = useState(false)
-
+  
+  // Variables
+  const dispatch = useDispatch();
+  
+  // Functions
+  
+  // This function allows us to remove a city from the list
   async function deleteCity() {
     let localItems = JSON.parse(localStorage.getItem("choosenCities") || '[]')
     const stateCountryCode = await axios.get(`http://localhost:3001/stateCountryCode?stateName=${state}&countryName=${country}`);
@@ -36,6 +38,7 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
     dispatch(modifyChoosenCities(choosenCities.filter((e: City) => !(e.name === name && e.country === country && e.state === state))))
   }
 
+  // This function allows us to show addicional information of the country
   async function showMore() {
     try {
       const additionalInfo = await axios.get(`http://localhost:3001/moreCountryInfo?countryName=${country}`);
@@ -44,20 +47,18 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
     } catch (e) {
       showMessage('Sorry, an error ocurred')
     }
-
   }
 
   return (
     <>
       <div className={s.card}>
-        <img src={closeCircleOutline} className={s.iconDumb} onClick={() => deleteCity()} />
+        <img src={closeCircleOutline} className={s.iconDumb} onClick={() => deleteCity()} alt='Remove city'/>
         <div className='w-100'>
           <h2 className='text-center mb-0'>{name}</h2>
           <div className={`${s.infoSection} mt-3 mb-0`}>
             <div className={s.iconContainer}>
               <img className={s.countryFlag} src={flag} alt='Country flag'></img>
             </div>
-
             <div className={s.detailsContainer}>
               <label className='bold'>Location</label>
               <div>

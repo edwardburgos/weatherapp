@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import s from './SearchBar.module.css';
 import { Form, Modal } from 'react-bootstrap';
 import axios, { CancelToken } from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { modifyChoosenCities, modifyModalState } from '../../actions';
-import { City, Flags, AvailableCity, Country, SearchResult } from '../../extras/types';
+import { City, Flags, Country, SearchResult } from '../../extras/types';
 import Result from '../Result/Result'
 import loadingHorizontal from '../../img/others/loadingHorizontalGif.gif';
 import closeCircleOutline from "../../img/icons/close-circle-outline.svg";
@@ -12,10 +12,14 @@ import { showMessage } from '../../extras/functions';
 
 export default function SearchBar() {
 
-  const [source, setSource] = useState<{ token: CancelToken, cancel: (() => void) } | string>('')
+  // Redux states
   const countries = useSelector((state: { countries: Country[] }) => state.countries)
-  // const [countries, setCountries] = useState<Country[]>([])
-  const [availableCities, setAvailableCities] = useState<string[]>([])
+  const modalState = useSelector((state: { modalState: boolean }) => state.modalState)
+  const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
+  const flags = useSelector((state: { flags: Flags }) => state.flags)
+
+  // Own states
+  const [source, setSource] = useState<{ token: CancelToken, cancel: (() => void) } | string>('')
   const [buttonState, setButtonState] = useState(true)
   const [buttonContent, setButtonContent] = useState('Search')
   const [city, setCity] = useState('')
@@ -24,28 +28,13 @@ export default function SearchBar() {
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
 
+  // Variables
   const dispatch = useDispatch();
 
-  const modalState = useSelector((state: { modalState: boolean }) => state.modalState)
-  const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
-  const flags = useSelector((state: { flags: Flags }) => state.flags)
-
-
-  useEffect(() => {
-    //if (country !== 'default') setAvailableCities(countriesCities.filter(f => f.country === country)[0]['cities'])
-  }, [country])
-
-
-
-
+  // This function allows us to search for a city
   async function searchCity(cityName: string, country: string[]) {
     let cities: { data: SearchResult[] } = { data: [{ name: '', state: { code: '', name: '' }, country: { code: '', name: '' } }] };
-    // if (typeof cancel !== 'string' && cancel !== undefined) { 
-    // //   console.log('olor', cancel)
-    // //   console.log('sabor', typeof cancel )
-    //   cancel()
-    // }
-    if (typeof source !== 'string') { source.cancel(); } //No es necesario cancelar en cada una solo en la última cuando 
+    if (typeof source !== 'string') { source.cancel(); }
     const CancelToken = axios.CancelToken;
     const newSource = CancelToken.source();
     setSource(newSource)
@@ -66,6 +55,7 @@ export default function SearchBar() {
     } catch (e) { }
   }
 
+  // This function allows us to add a city to the list
   async function add() {
     try {
       const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},${state[0] !== 'code' ? state[0] : ''},${country[1]}&appid=${process.env.REACT_APP_API_KEY}`)
@@ -78,21 +68,18 @@ export default function SearchBar() {
         dispatch(modifyChoosenCities([{ name: citieInfo.data.name, country: country[2], flag: flags[`${country[1].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: state[1] !== 'name' ? state[1] : '' }, ...choosenCities]))
       }
     } catch (e) {
-      console.log(e)
+      showMessage('Sorry, an error ocurred')
     }
   }
 
-  // function showResults() {
-  //   if (results.length) {
-
-  //   }
-  // }
+  // This function allows us to do all the actions needed when there are no values provided
   function noAction() {
     if (typeof source !== 'string') { source.cancel(); }
     setLoading(false);
     setButtonState(true);
   }
 
+  // This function allows us to disable button with all the logic needed
   function disableButton(origin: string) {
     if (origin === 'city') {
       setButtonContent('Search')
@@ -111,7 +98,6 @@ export default function SearchBar() {
     <>
       <div className={s.container}>
         <div className={s.searchContainer}>
-
           <div className={s.selectContainer}>
             <select className={`form-control`} id="countrySelector" value={country[1]} onChange={e => { setCountry([e.target.value === 'default' ? 'app' : 'user', e.target.value]); e.target.value === 'default' && !city ? noAction() : searchCity(city, ['user', e.target.value]) }} name="country">
               <option key='default' value='default'>Select a country</option>
@@ -119,17 +105,12 @@ export default function SearchBar() {
                 countries.map(e => <option key={e.code} value={e.code}>{e.name}</option>)
                 : null}
             </select>
-            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => { setCountry(['app', 'default', 'name']); disableButton('country') }} />
+            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => { setCountry(['app', 'default', 'name']); disableButton('country') }} alt='Remove selected country' />
           </div>
-
           <div className={`${s.test} ${s.searchInput}`}>
             <Form.Control value={city} className={` ${s.inputPassword}`} placeholder="Enter a city" onChange={e => { setCity(e.target.value); !e.target.value && country[1] === 'default' ? noAction() : searchCity(e.target.value, country); }} />
-            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => { setCity(''); disableButton('city') }} />
+            <img src={closeCircleOutline} className={s.iconDumb} onClick={() => { setCity(''); disableButton('city') }} alt='Remove city' />
           </div>
-
-
-
-
           {
             loading ?
               <div className={`btn btn-primary disabled ${s.searchButton}`}>

@@ -29,8 +29,6 @@
     display: inline-block;
 }
 
-
-
 .contenedor {
     padding: 0 50px;
     padding-bottom: 20px;
@@ -50,26 +48,11 @@
     width: 100%;
     
 }
+
 .inputCity:focus {
     border: #286175 solid 2px;
     box-shadow: 0 0 10px #27677d;
 }
-
-
-/* @media screen and (max-width: 600px) {
-    .contenedor {
-        display: block;
-    }
-    .searchButton {
-        width: 100%;
-        margin-left: 0;
-        margin-top: 8px;
-    }
-    body {
-        padding-top: 231.20px;
-    }
-}
- */
 
 .inputPassword {
     padding-right: 2.5rem !important;
@@ -81,22 +64,21 @@
     position: absolute;
     right: 12px;
     max-height: 50%;
-    color: #000;
-  }
+    cursor: pointer;
+}
 
-  .test, .selectContainer {
+.test, .selectContainer {
     position: relative;
     display: flex;
     align-items: center;
     margin-bottom: 16px;
-  }
+}
 
-  .selectContainer {
-      width: 100%;
-  }
-  
+.selectContainer {
+    width: 100%;
+}
 
-  @media screen and (min-width: 768px) {
+@media screen and (min-width: 768px) {
     .searchContainer {
         width: 80%;
     }

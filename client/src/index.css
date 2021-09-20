@@ -31,33 +31,6 @@ h1, h2, h3, h4, h5, h6, .bold{
   opacity: .65 !important;
 }
 
-@media only screen and (max-width: 576px) {
-  .modal-dialog {
-    margin-left: 5% !important;
-    margin-right: 5% !important;
-  }
-} 
-
-/* .container {
-  background: url('./img/backgroundPhone.jpg') no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-color: #2B548C;
-  text-align: center;
-  height: 100vh;
-  padding: 16px;
-  
-} */
-/* 
-@media only screen and (min-width: 992px) {
-  .container {
-      background-image: url('./img/backgroundComputer.jpg');
-  }
-} */
-
-
 .Toastify__toast--default {
   color: #000 !important;
   border-radius: 5px !important;
@@ -73,3 +46,10 @@ h1, h2, h3, h4, h5, h6, .bold{
 .Toastify__progress-bar--default {
   background: #2962ff !important;
 }
+
+@media only screen and (max-width: 576px) {
+  .modal-dialog {
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+  }
+} 

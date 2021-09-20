@@ -3,35 +3,19 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const index = require('./routes/index.js');
 
-
-// Configures the database and opens a global connection that can be used in any module with `mongoose.connection`
 require('./db.js');
 
-// Create the Express application
 const server = express();
 
-// Gives us access to variables set in the .env file via `process.env.VARIABLE_NAME` syntax
 require('dotenv').config();
-
-// Pass the global passport object into the configuration function
-// require('./extras/passport.js')(passport);
 
 server.name = 'API';
 
-
-// This will initialize the passport object on every request
-// server.use(passport.initialize());
-
-// Instead of using body-parser middleware, use the new Express implementation of the same thing
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
 
-
-//server.use(cookieParser());
 server.use(morgan('dev'));
 
-// Allows our client to make HTTP requests to Express application
-// server.use(cors());
 server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // update to match the domain you will make the request from
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -42,7 +26,6 @@ server.use((req, res, next) => {
 
 server.use('/', index);
 
-// This handle errors
 server.use((req, res) => {
   return res.status(500).send('Sorry, an error ocurred');
 });

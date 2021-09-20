@@ -109,17 +109,6 @@
     margin: 0 4px 8px 4px;
 }
 
-@media only screen and (min-width: 768px) {
-    .card {
-        width: 45%;
-    }
-}
-@media only screen and (min-width: 1200px) {
-    .card {
-        width: 22%;
-    }
-}
-
 .enlace {
     font-weight: 600;
     color:#0d6efd;
@@ -144,4 +133,15 @@
     width: 50%;
     float: right;
     padding: 0 0 16px 16px;
+}
+
+@media only screen and (min-width: 768px) {
+    .card {
+        width: 45%;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .card {
+        width: 22%;
+    }
 }

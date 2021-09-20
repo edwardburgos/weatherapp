@@ -9,21 +9,21 @@ import { City, Flags } from './extras/types'
 import { modifyChoosenCities, setCountries, setFlags } from './actions';
 import { useDispatch, useSelector } from 'react-redux';
 
-
-
-
 export default function App() {
 
+  // Redux states
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
 
+  // Own states
   const [loading, setLoading] = useState<boolean>(true);
-  const [images, setImages] = useState({})
 
+  // Variables
   const dispatch = useDispatch();
 
-  // This hook set the city of the user
+  // Hooks
+
+  // This hook set the user location and countries 
   useEffect(() => {
-    //dispatch(console.log(cities.cities[0]))
     const cancelToken = axios.CancelToken;
     const source = cancelToken.source();
     let images: Flags = {};
@@ -31,13 +31,14 @@ export default function App() {
     dispatch(setFlags(images))
     async function getInfo() {
       try {
-        // Get user data
+
+        // Get user location
         if (!localStorage.getItem("choosenCities")) {
           const locationInfo = await axios.get('https://geolocation-db.com/json/', { cancelToken: source.token });
-          const stateCode = await axios.get(`http://localhost:3001/cityHasState?city=${locationInfo.data.city}&stateName=${locationInfo.data.state}&countryCode=${locationInfo.data.country_code}`, { cancelToken: source.token } )
+          const stateCode = await axios.get(`http://localhost:3001/cityHasState?city=${locationInfo.data.city}&stateName=${locationInfo.data.state}&countryCode=${locationInfo.data.country_code}`, { cancelToken: source.token })
           const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${locationInfo.data.city},${(stateCode.data).toString().length && /^[A-Z]+$/.test(stateCode.data) ? stateCode.data : ''},${locationInfo.data.country_code}&appid=${process.env.REACT_APP_API_KEY}`)
           const { weather, main, wind } = weatherInfo.data
-          dispatch(modifyChoosenCities([{ name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: (stateCode.data).toString().length && /^[A-Z]+$/.test(stateCode.data) ? locationInfo.data.state : '' }, ...choosenCities]));
+          dispatch(modifyChoosenCities([{ name: locationInfo.data.city, country: locationInfo.data.country_name, flag: images[`${locationInfo.data.country_code.toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: (stateCode.data).toString().length && /^[A-Z]+$/.test(stateCode.data) ? locationInfo.data.state : '' }]));
           localStorage.setItem('choosenCities', JSON.stringify([[locationInfo.data.city, (stateCode.data).toString().length && /^[A-Z]+$/.test(stateCode.data) ? stateCode.data : '', locationInfo.data.country_code]]));
         } else {
           let localChoosenCities: City[] = []
@@ -65,8 +66,7 @@ export default function App() {
     }
     getInfo();
     return () => source.cancel("Unmounted");
-  }, [])
-
+  }, [dispatch])
 
   return (
     <>
@@ -81,14 +81,6 @@ export default function App() {
           <div className={s.appContainer}>
             <img className={s.earthGif} src={earthGif} alt='earthGif'></img>
             <SearchBar></SearchBar>
-            {/* {
-              choosenCities ? 
-              :
-
-            } */}
-            {/* <SearchBar
-          onSearch={(ciudad) => alert(ciudad)}
-        /> */}
             <div className={s.searchContent}>
               <div className={s.cardsContainer}>
                 {
@@ -105,29 +97,6 @@ export default function App() {
                 }
               </div>
             </div>
-
-
-
-
-            {/* <div>
-        <div className={s.contenedor}>
-          <Card></Card>
-          </div>
-      </div> */}
-
-
-
-            {/* { cities.map(city => (
-      <Card 
-        max={city.main.temp_max}
-        min={city.main.temp_min}
-        name={city.name}
-        img={city.weather[0].icon}
-        onClose={() => alert(city.name)}></Card>
-    ))
-    } */}
-
-
           </div>
       }
     </>

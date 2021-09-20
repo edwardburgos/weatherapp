@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import s from './Result.module.css'
 import axios from 'axios';
 import { City, ResultProps, Flags } from '../../extras/types';
@@ -8,22 +7,16 @@ import { showMessage } from '../../extras/functions';
 
 export default function Result({ searchResult, margin }: ResultProps) {
 
+  // Redux states
   const choosenCities = useSelector((state: { choosenCities: City[] }) => state.choosenCities)
   const flags = useSelector((state: { flags: Flags }) => state.flags)
+  
+  // Variables
   const dispatch = useDispatch();
 
-  //   export type Country = {
-  //     code: string,
-  //     name: string
-  // }
+  // Functions
 
-  // export type SearchResult = {
-  //     name: string,
-  //     state: string,
-  //     country: Country
-  // }
-
-
+  // This function allows us to add the city to the list
   async function add() {
     try {
       const citieInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${searchResult.name},${searchResult.state ? searchResult.state.code : ''},${searchResult.country.code}&appid=${process.env.REACT_APP_API_KEY}`)
@@ -37,7 +30,7 @@ export default function Result({ searchResult, margin }: ResultProps) {
         dispatch(modifyModalState(false))
       }
     } catch (e) {
-      console.log(e)
+      showMessage('Sorry, an error ocurred')
     }
   }
 
