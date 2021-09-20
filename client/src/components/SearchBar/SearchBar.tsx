@@ -56,27 +56,14 @@ export default function SearchBar() {
       } else {
         cities = await axios.get(`http://localhost:3001/cities?name=${cityName}`, { cancelToken: newSource.token })
       }
-    } catch (e) {}
-    setLoading(false);
-    if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName.toLowerCase()) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code, cities.data[0].country.name]); }; cities.data[0].state ? setState([cities.data[0].state.code, cities.data[0].state.name]) : setState(['code', 'name']); setButtonContent('Add'); setButtonState(false) }
-    else {
-      if (cities.data.length) {
-        if (country[0] !== 'user') { setCountry(['app', 'default', 'name']) } setButtonContent('Search'); setResults(cities.data); setButtonState(false)
-      } else { setButtonContent('No cities found'); setButtonState(true) }
-
-    }
-
-    // const filterInfo = info.filter((e: AvailableCity) => e.name.toLowerCase() === cityName.toLowerCase())
-    // if (filterInfo.length === 1) { 
-    //   console.log(filterInfo)
-    //   return setButtonContent('Add');
-
-
-
-    // } else {
-    //   const results = info.filter((e: AvailableCity) => e.name.toLowerCase().includes(cityName)).length
-    //   if (results === 1) return setButtonContent('Add')
-    //   if (results) return setButtonContent('Search');
+      setLoading(false);
+      if (cities.data.length === 1 && cities.data[0].name.toLowerCase() === cityName.toLowerCase()) { if (country[0] !== 'user') { setCountry(['app', cities.data[0].country.code, cities.data[0].country.name]); }; cities.data[0].state ? setState([cities.data[0].state.code, cities.data[0].state.name]) : setState(['code', 'name']); setButtonContent('Add'); setButtonState(false) }
+      else {
+        if (cities.data.length) {
+          if (country[0] !== 'user') { setCountry(['app', 'default', 'name']) } setButtonContent('Search'); setResults(cities.data); setButtonState(false)
+        } else { setButtonContent('No cities found'); setButtonState(true) }
+      }
+    } catch (e) { }
   }
 
   async function add() {
