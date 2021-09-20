@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modifyChoosenCities } from '../../actions';
 import { Modal } from 'react-bootstrap';
 import { showMessage } from '../../extras/functions';
+import { IndexKind } from 'typescript';
 
 
 
@@ -119,10 +120,10 @@ export default function Card({ name, country, flag, weather, weatherIcon, temper
           {moreInfo.subregion ? <div className='mb-2'><span className='bold'>Subregion: </span><span>{moreInfo.subregion}</span></div> : null}
           {moreInfo.population ? <div className='mb-2'><span className='bold'>Population: </span><span>{moreInfo.population}</span></div> : null}
           {moreInfo.demonym ? <div className='mb-2'><span className='bold'>Demonym: </span><span>{moreInfo.demonym}</span></div> : null}
-          {moreInfo.borders ? <div className='mb-2'><span className='bold'>Border: </span><ul className={s.ul}>{moreInfo.borders.map(e => <li><img src={flags[`${e.code.toLowerCase()}.svg`].default} className={s.borderFlag} alt='Country flag' />{e.name}</li>)}</ul></div> : null}
-          {moreInfo.currencies ? <div className='mb-2'><span className='bold'>Currencies: </span><ul className={s.ul}>{moreInfo.currencies.map(e => <li>{e}</li>)}</ul></div> : null}
-          {moreInfo.languages ? <div className='mb-2'><span className='bold'>Languages: </span><ul className={s.ul}>{moreInfo.languages.map(e => <li>{e}</li>)}</ul></div> : null}
-          {moreInfo.regionalBlocs ? <div><span className='bold'>Regional Blocs: </span><ul className={s.ul}>{moreInfo.regionalBlocs.map(e => <li>{e}</li>)}</ul></div> : null}
+          {moreInfo.borders ? <div className='mb-2'><span className='bold'>Border: </span><ul className={s.ul}>{moreInfo.borders.map((e, index) => <li key={index}><img src={flags[`${e.code.toLowerCase()}.svg`].default} className={s.borderFlag} alt='Country flag' />{e.name}</li>)}</ul></div> : null}
+          {moreInfo.currencies ? <div className='mb-2'><span className='bold'>Currencies: </span><ul className={s.ul}>{moreInfo.currencies.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
+          {moreInfo.languages ? <div className='mb-2'><span className='bold'>Languages: </span><ul className={s.ul}>{moreInfo.languages.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
+          {moreInfo.regionalBlocs ? <div><span className='bold'>Regional Blocs: </span><ul className={s.ul}>{moreInfo.regionalBlocs.map((e, index) => <li key={index}>{e}</li>)}</ul></div> : null}
         </Modal.Body>
       </Modal>
     </>
