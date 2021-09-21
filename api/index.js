@@ -52,8 +52,8 @@ conn.sync({ force: false }).then(async () => {
   }
 
   console.log('Database created')
+});
 
-  server.listen(3001, () => {
-    console.log('Server listening at 3001');
-  });
+server.listen(process.env.PORT, () => {
+  console.log(`Server listening at ${process.env.PORT}`);
 });
